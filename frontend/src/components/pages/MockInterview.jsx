@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
+import "/src/App.css"; // Correct path to CSS
 
 const questions = [
     "Why should we hire you?",
@@ -42,6 +44,10 @@ const MockInterview = () => {
             const countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
             return () => clearInterval(countdown);
         }
+        if (timer === 0) {
+            stopInterview();
+            alert("Time's up! Interview has ended.");
+        }
     }, [isInterviewStarted, timer]);
 
     // Move to next question
@@ -71,55 +77,47 @@ const MockInterview = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-100">
-            <header className="bg-blue-600 text-white text-xl font-bold py-4 text-center">
-                Mock Interview
+        <div className="mock-interview-container full-page">
+            <header className="header">
+                <Link to="/job-recommendation" className="job-recommendation-link">Job Recommendations</Link> {/* Link updated */}
+                <h1>Mock Interview</h1>
             </header>
-
-            <div className="flex-grow flex flex-col md:flex-row items-center p-6">
-                <div className="w-full md:w-1/2 p-4 flex flex-col items-center">
-                    <video ref={videoRef} autoPlay className="border rounded-lg w-full h-80 md:h-96"></video>
-                    <p className="mt-2 text-lg font-bold text-red-600">Time Left: {timer}s</p>
-                    <div className="flex gap-4 mt-4">
+            <div className="interview-content full-height">
+                <div className="video-section full-video">
+                    <video ref={videoRef} autoPlay className="video-feed"></video>
+                    <p className="timer">Time Left: {timer}s</p>
+                    <div className="button-group">
                         {!isInterviewStarted ? (
-                            <button onClick={startInterview} className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-                                Start Interview
-                            </button>
+                            <button onClick={startInterview} className="start-btn">Start Interview</button>
                         ) : (
-                            <button onClick={stopInterview} className="bg-red-600 text-white px-4 py-2 rounded-lg">
-                                Stop Interview
-                            </button>
+                            <button onClick={stopInterview} className="stop-btn">Stop Interview</button>
                         )}
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/2 p-4">
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                        <p className="text-lg font-semibold">Question:</p>
-                        <p className="text-gray-700">{questions[currentQuestionIndex]}</p>
+                <div className="question-section full-width">
+                    <div className="question-box">
+                        <p className="question-label">Question:</p>
+                        <p className="question-text">{questions[currentQuestionIndex]}</p>
                     </div>
 
                     <textarea
-                        className="border rounded-lg w-full p-3 mt-4 h-32"
+                        className="response-box large-input"
                         placeholder="Type your response here..."
                         value={response}
                         onChange={(e) => setResponse(e.target.value)}
                     ></textarea>
 
-                    <div className="flex gap-4 mt-4">
-                        <button onClick={submitAnswer} className="bg-green-600 text-white px-4 py-2 rounded-lg">
-                            Submit Answer
-                        </button>
-                        <button onClick={nextQuestion} className="bg-gray-600 text-white px-4 py-2 rounded-lg">
-                            Next Question
-                        </button>
+                    <div className="button-group">
+                        <button onClick={submitAnswer} className="submit-btn">Submit Answer</button>
+                        <button onClick={nextQuestion} className="next-btn">Next Question</button>
                     </div>
                 </div>
             </div>
 
-            <footer className="bg-gray-800 text-white py-3 text-center">
-                <button className="px-4 py-2 bg-red-500 rounded-lg mx-2">Exit Interview</button>
-                <button className="px-4 py-2 bg-yellow-500 rounded-lg mx-2">Need Help?</button>
+            <footer className="footer bottom-bar">
+                <button onClick={stopInterview} className="exit-btn">Exit Interview</button>
+                <button className="help-btn">Need Help?</button>
             </footer>
         </div>
     );
