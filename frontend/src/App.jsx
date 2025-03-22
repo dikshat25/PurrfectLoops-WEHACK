@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import JobRecommendation from "./components/pages/JobRecommendations";
-import MockInterview from "./components/pages/MockInterview";
+import JobRecommendation from "./pages/JobRecommendations";
+import MockInterview from "./pages/MockInterview";
 import VideoAnalysis from "./pages/VideoAnalysis.jsx";
 import DeepfakeDetection from "./pages/DeepFakeDetection.jsx";
 import { UserCircle, Video, Shield, ChevronDown, Menu, X } from "lucide-react";
