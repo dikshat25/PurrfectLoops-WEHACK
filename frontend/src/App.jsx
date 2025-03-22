@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
+import MockInterview from "./components/MockInterview";
 
 function App() {
-  return <h1>React Page</h1>;
+  return (
+    <div>
+      <MockInterview />
+    </div>
+  );
 }
 
 export default App;
