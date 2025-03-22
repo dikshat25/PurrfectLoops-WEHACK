@@ -1,9 +1,11 @@
-
-import React, { useState } from 'react'; 
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import JobRecommendation from "./components/pages/JobRecommendations";
+import MockInterview from "./components/pages/MockInterview";
 import VideoAnalysis from "./pages/VideoAnalysis.jsx";
 import DeepfakeDetection from "./pages/DeepFakeDetection.jsx";
-import { UserCircle, Video, Shield, ChevronDown, Menu, X } from 'lucide-react';
+import { UserCircle, Video, Shield, ChevronDown, Menu, X } from "lucide-react";
+import "./App.css";
 
 const App = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,11 +35,11 @@ const App = () => {
                       <ChevronDown size={16} className="ml-1" />
                     </button>
                     <div className="hidden group-hover:block absolute z-10 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1">
-                      <Link to="/mock-interviews" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link to="/mock-interview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         AI Mock Interviews
                       </Link>
-                      <Link to="/skill-tests" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Skill Assessments
+                      <Link to="/job-recommendation" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Job Recommendations
                       </Link>
                     </div>
                   </div>
@@ -78,30 +80,19 @@ const App = () => {
         </header>
         <main className="py-6">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<JobRecommendation />} />
             <Route path="/video-analysis" element={<VideoAnalysis />} />
             <Route path="/deepfake-detection" element={<DeepfakeDetection />} />
+            <Route path="/job-recommendation" element={<JobRecommendation />} />
+            <Route path="/mock-interview" element={<MockInterview />} />
           </Routes>
         </main>
+        <footer className="bg-gray-800 text-white py-3 text-center">
+          <p>© {new Date().getFullYear()} Skill Hiring Platform</p>
+        </footer>
       </div>
     </Router>
   );
 };
 
-const HomePage = () => {
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-          AI-Powered Hiring Solutions
-        </h1>
-        <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
-          Analyze interviews, detect deepfakes, and improve your hiring process with our advanced AI tools.
-        </p>
-      </div>
-    </div>
-  );
-};
-
 export default App;
-
