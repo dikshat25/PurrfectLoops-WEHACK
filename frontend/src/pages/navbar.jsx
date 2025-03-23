@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBriefcase, FaMicrophone, FaVideo, FaHome, FaUserCircle, FaSignInAlt } from "react-icons/fa";
+import { FaBriefcase, FaMicrophone, FaHome, FaUserCircle, FaSignInAlt } from "react-icons/fa";
 
 const SharedNavbar = ({ activePage }) => {
   const navigate = useNavigate();
@@ -19,9 +19,6 @@ const SharedNavbar = ({ activePage }) => {
         </Link>
         <Link to="/mock-interview" className={`nav-link ${activePage === 'interview' ? 'active' : ''}`}>
           <FaMicrophone /> Mock Interview
-        </Link>
-        <Link to="/deepfake-detection" className={`nav-link ${activePage === 'deepfake' ? 'active' : ''}`}>
-          <FaVideo /> Deepfake Detection
         </Link>
         <Link to="/profile" className={`nav-link ${activePage === 'profile' ? 'active' : ''}`}>
           <FaUserCircle /> Profile

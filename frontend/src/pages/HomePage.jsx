@@ -2,23 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/style.css";
 import {
-  FaSearch,
   FaLaptopCode,
   FaRobot,
   FaGamepad,
   FaVideo,
-  FaBriefcase,
-  FaUserCircle
 } from "react-icons/fa";
-import { IoFilter } from "react-icons/io5";
 import SharedNavbar from "../pages/navbar";
 import SharedFooter from "../pages/footer";
 
 const HomePage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // For demo purposes
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-  // Function to navigate to different feature pages
   const navigateToFeature = (path) => {
     navigate(path);
   };
@@ -92,10 +87,8 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      {/* Navigation */}
       <SharedNavbar activePage="home" />
 
-      {/* 1. Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
           <h1>Find the Right Job with the Right Skills!</h1>
@@ -111,12 +104,10 @@ const HomePage = () => {
         </div>
       </section>
 
-      
-      {/* 3. Key Features Section */}
       <section className="features-section">
         <h2>Our AI-Powered Features</h2>
         <div className="features-grid">
-          <div 
+          <div
             className="feature-card"
             onClick={() => navigateToFeature("/video-analysis")}
             style={{ cursor: "pointer" }}
@@ -131,22 +122,7 @@ const HomePage = () => {
             </p>
             <button className="feature-btn">Try Now</button>
           </div>
-          <div 
-            className="feature-card"
-            onClick={() => navigateToFeature("/deepfake-detection")}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="feature-icon">
-              <FaUserCircle />
-            </div>
-            <h3>Deepfake Detection</h3>
-            <p>
-              Ensuring authenticity in video interviews with advanced AI
-              verification.
-            </p>
-            <button className="feature-btn">Try Now</button>
-          </div>
-          <div 
+          <div
             className="feature-card"
             onClick={() => navigateToFeature("/games")}
             style={{ cursor: "pointer" }}
@@ -161,7 +137,7 @@ const HomePage = () => {
             </p>
             <button className="feature-btn">Try Now</button>
           </div>
-          <div 
+          <div
             className="feature-card"
             onClick={() => navigateToFeature("/mock-interview")}
             style={{ cursor: "pointer" }}
@@ -176,7 +152,7 @@ const HomePage = () => {
             </p>
             <button className="feature-btn">Try Now</button>
           </div>
-          <div 
+          <div
             className="feature-card"
             onClick={() => navigateToFeature("/job-recommendations")}
             style={{ cursor: "pointer" }}
@@ -193,13 +169,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 4. User Dashboard Preview (conditionally rendered) */}
       {isLoggedIn && (
         <section className="dashboard-preview">
           <h2>Your Dashboard</h2>
           <div className="dashboard-container">
             <div className="profile-summary">
-              <div className="profile-image">{/* Profile image removed */}</div>
               <div className="profile-details">
                 <h3>Welcome back, John Doe!</h3>
                 <div className="profile-progress">
@@ -233,8 +207,8 @@ const HomePage = () => {
                 <p className="stat-label">Top 10%</p>
               </div>
             </div>
-            <button 
-              className="view-profile-btn" 
+            <button
+              className="view-profile-btn"
               onClick={() => navigateToFeature("/profile")}
             >
               View Full Profile
@@ -243,7 +217,6 @@ const HomePage = () => {
         </section>
       )}
 
-      {/* 5. Featured Jobs & Companies */}
       <section className="jobs-companies-section">
         <div className="section-header">
           <h2>Discover Opportunities</h2>
@@ -255,7 +228,6 @@ const HomePage = () => {
               {featuredJobs.map((job, index) => (
                 <div className="job-card" key={index}>
                   <div className="job-card-header">
-                    {/* Company logo removed */}
                     <div className="job-details">
                       <h4>{job.title}</h4>
                       <p>{job.company}</p>
@@ -275,7 +247,7 @@ const HomePage = () => {
                 </div>
               ))}
             </div>
-            <button 
+            <button
               className="view-all-btn"
               onClick={() => navigateToFeature("/job-recommendations")}
             >
@@ -287,7 +259,6 @@ const HomePage = () => {
             <div className="companies-grid">
               {topCompanies.map((company, index) => (
                 <div className="company-card" key={index}>
-                  {/* Company logo removed */}
                   <p>{company}</p>
                 </div>
               ))}
@@ -296,7 +267,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 7. Blog & Career Resources */}
       <section className="resources-section">
         <h2>Career Resources</h2>
         <div className="resources-container">
@@ -345,7 +315,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 8. Footer */}
       <SharedFooter />
     </div>
   );
