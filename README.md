@@ -35,6 +35,11 @@ Traditional degrees don’t always reflect practical skills. Companies struggle 
 
 To address these hiring challenges, we propose an **AI-driven Skill Hiring Platform** that enhances recruitment through automation, data-driven insights, and intelligent candidate evaluations.
 
+### 📽️ Project Demo  
+[![Skill Hiring Platform Demo](https://img.youtube.com/vi/K7IH7HkZFTU/0.jpg)](https://youtu.be/K7IH7HkZFTU)  
+
+*Click the image above to watch the video demo on YouTube.*
+
 ---
 
 ## Key Features
@@ -75,4 +80,4 @@ To address these hiring challenges, we propose an **AI-driven Skill Hiring Platf
 
 ---
 
-This **AI-powered Skill Hiring Platform** aims to **streamline recruitment, improve hiring accuracy, and enhance the candidate experience**, making hiring smarter and more efficient. 
+This **AI-powered Skill Hiring Platform** aims to **streamline recruitment, improve hiring accuracy, and enhance the candidate experience**, making hiring smarter and more efficient. 🚀
