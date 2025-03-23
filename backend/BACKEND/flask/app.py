@@ -1,6 +1,17 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/recommend": {"origins": "*"}}, supports_credentials=True)
+
+@app.route('/recommend', methods=['OPTIONS'])
+def handle_options():
+    """Handles CORS preflight OPTIONS request"""
+    response = jsonify({"message": "CORS preflight success"})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response, 200
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
@@ -17,7 +28,6 @@ def recommend():
     if not skills or experience is None:
         return jsonify({"error": "Missing required fields"}), 400
 
-    # Replace this with your ML model's actual predictions
     recommendations = [
         {"job_title": "Machine Learning Engineer", "company": "Google"},
         {"job_title": "Data Scientist", "company": "Facebook"}
