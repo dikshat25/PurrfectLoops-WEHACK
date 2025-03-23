@@ -9,7 +9,7 @@
 - **Sayee Ramteke**
 
 ## GitHub Repository
-[Skill Hiring Platform Repository](#)
+[Skill Hiring Platform Repository](https://github.com/dikshat25/PurrfectLoops-WEHACK)
 
 ## Online Hackathon
 This project was developed as part of the **WeHack Online Hackathon**, conducted on **March 22 and March 23**.
@@ -39,6 +39,9 @@ To address these hiring challenges, we propose an **AI-driven Skill Hiring Platf
 [![Skill Hiring Platform Demo](https://img.youtube.com/vi/K7IH7HkZFTU/0.jpg)](https://youtu.be/K7IH7HkZFTU)  
 
 *Click the image above to watch the video demo on YouTube.*
+
+📂 **Project Files & Resources**  
+[Google Drive Link](https://drive.google.com/drive/folders/1vsJ_bL5gYYKgBXtHeAOwr9r2yAXKgMUK)  
 
 ---
 
