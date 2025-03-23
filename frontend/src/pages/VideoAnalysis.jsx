@@ -2,6 +2,221 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import { AlertCircle, Mic, MicOff, Video, VideoOff, Check, X, Play, Square, Send, Clock, HelpCircle, Download, ChevronRight, ChevronDown, ChevronUp, BarChart2 } from 'lucide-react';
+import '../styles/style.css';
+
+// Internal CSS styles
+const styles = {
+  container: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '1.5rem',
+    backgroundColor: '#f8fafc',
+    minHeight: '100vh',
+    fontFamily: 'Inter, system-ui, sans-serif',
+  },
+  header: {
+    marginBottom: '1.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottom: '1px solid #e2e8f0',
+    paddingBottom: '1rem',
+  },
+  headerTitle: {
+    fontSize: '2rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    background: 'linear-gradient(90deg, #2563eb, #3b82f6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+  },
+  button: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.625rem 1rem',
+    borderRadius: '0.5rem',
+    fontWeight: '500',
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
+    border: 'none',
+    outline: 'none',
+  },
+  primaryButton: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.2)',
+    '&:hover': {
+      backgroundColor: '#2563eb',
+      boxShadow: '0 6px 8px -1px rgba(59, 130, 246, 0.3)',
+    },
+  },
+  secondaryButton: {
+    backgroundColor: '#f1f5f9',
+    color: '#475569',
+    '&:hover': {
+      backgroundColor: '#e2e8f0',
+    },
+  },
+  dangerButton: {
+    backgroundColor: '#ef4444',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#dc2626',
+    },
+  },
+  successButton: {
+    backgroundColor: '#10b981',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#059669',
+    },
+  },
+  webcamContainer: {
+    borderRadius: '0.75rem',
+    overflow: 'hidden',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    transition: 'transform 0.2s ease',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+    },
+  },
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(1, 1fr)',
+    gap: '1.5rem',
+    '@media (min-width: 1024px)': {
+      gridTemplateColumns: '2fr 1fr',
+    },
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '0.75rem',
+    overflow: 'hidden',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  },
+  cardHeader: {
+    padding: '1rem',
+    borderBottom: '1px solid #e2e8f0',
+    fontWeight: '600',
+    fontSize: '1.125rem',
+    color: '#1e293b',
+  },
+  cardBody: {
+    padding: '1.5rem',
+  },
+  alertError: {
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#fee2e2',
+    color: '#b91c1c',
+    padding: '0.75rem 1rem',
+    borderRadius: '0.5rem',
+    marginBottom: '1rem',
+    borderLeft: '4px solid #ef4444',
+  },
+  tipBox: {
+    backgroundColor: '#eff6ff',
+    color: '#1e40af',
+    padding: '1rem',
+    borderRadius: '0.5rem',
+    marginBottom: '1.5rem',
+    borderLeft: '4px solid #3b82f6',
+  },
+  recIndicator: {
+    position: 'absolute',
+    top: '0.75rem',
+    left: '0.75rem',
+    backgroundColor: 'rgba(239, 68, 68, 0.9)',
+    color: 'white',
+    borderRadius: '9999px',
+    padding: '0.375rem 0.75rem',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '0.875rem',
+    fontWeight: '500',
+    backdropFilter: 'blur(4px)',
+  },
+  pulseDot: {
+    display: 'inline-block',
+    marginRight: '0.5rem',
+    height: '0.5rem',
+    width: '0.5rem',
+    backgroundColor: 'white',
+    borderRadius: '50%',
+    animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+  },
+  analyticsStat: {
+    padding: '1rem',
+    borderRadius: '0.5rem',
+    transition: 'transform 0.2s ease',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+    },
+  },
+  statValue: {
+    fontSize: '1.875rem',
+    fontWeight: '700',
+    display: 'flex',
+    alignItems: 'baseline',
+  },
+  statLabel: {
+    fontSize: '1.125rem',
+    fontWeight: '500',
+    marginBottom: '0.375rem',
+  },
+  keywordTag: {
+    backgroundColor: '#dbeafe',
+    color: '#1e40af',
+    padding: '0.375rem 0.75rem',
+    borderRadius: '9999px',
+    fontSize: '0.875rem',
+    display: 'inline-block',
+    margin: '0.25rem',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      backgroundColor: '#bfdbfe',
+      transform: 'translateY(-1px)',
+    },
+  },
+  progressBar: {
+    width: '100%',
+    backgroundColor: '#e2e8f0',
+    borderRadius: '9999px',
+    height: '0.5rem',
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: '9999px',
+    transition: 'width 1s ease',
+  },
+  countdownOverlay: {
+    position: 'absolute',
+    inset: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    zIndex: '10',
+    backdropFilter: 'blur(4px)',
+  },
+  countdownText: {
+    fontSize: '6rem',
+    fontWeight: '700',
+    color: 'white',
+    textShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
+    animation: 'pulse 1s infinite',
+  },
+  '@keyframes pulse': {
+    '0%, 100%': {
+      opacity: 1,
+    },
+    '50%': {
+      opacity: 0.5,
+    },
+  },
+};
 
 const VideoAnalysis = () => {
   // State variables
@@ -209,14 +424,15 @@ const VideoAnalysis = () => {
     }
   };
 
+  // Apply inline styles to JSX elements
   return (
-    <div className="max-w-6xl mx-auto p-4 bg-gray-50 min-h-screen">
-      <header className="mb-6 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">Video Interview Analysis</h1>
-        <div className="flex space-x-2 text-sm">
+    <div style={styles.container}>
+      <header style={styles.header}>
+        <h1 style={styles.headerTitle}>Video Interview Analysis</h1>
+        <div>
           <button 
-            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition"
             onClick={() => setShowTips(!showTips)}
+            style={{...styles.button, ...styles.secondaryButton}}
           >
             <HelpCircle size={16} />
             {showTips ? 'Hide Tips' : 'Show Tips'}
@@ -225,55 +441,75 @@ const VideoAnalysis = () => {
       </header>
 
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 flex items-center">
-          <AlertCircle className="mr-2" />
+        <div style={styles.alertError}>
+          <AlertCircle style={{ marginRight: '0.5rem' }} />
           <p>{error}</p>
-          <button className="ml-auto" onClick={() => setError(null)}><X size={16} /></button>
+          <button 
+            onClick={() => setError(null)}
+            style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: '#b91c1c' }}
+          >
+            <X size={16} />
+          </button>
         </div>
       )}
 
       {showTips && (
-        <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-4">
-          <h3 className="font-bold mb-2">Tips for a Successful Interview:</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Maintain good eye contact with the camera</li>
-            <li>Speak clearly and at a moderate pace</li>
-            <li>Minimize filler words like "um" and "like"</li>
-            <li>Sit up straight and maintain good posture</li>
+        <div style={styles.tipBox}>
+          <h3 style={{ fontWeight: '600', marginBottom: '0.5rem' }}>Tips for a Successful Interview:</h3>
+          <ul style={{ paddingLeft: '1.25rem', marginTop: '0.5rem' }}>
+            <li style={{ marginBottom: '0.25rem' }}>Maintain good eye contact with the camera</li>
+            <li style={{ marginBottom: '0.25rem' }}>Speak clearly and at a moderate pace</li>
+            <li style={{ marginBottom: '0.25rem' }}>Minimize filler words like "um" and "like"</li>
+            <li style={{ marginBottom: '0.25rem' }}>Sit up straight and maintain good posture</li>
             <li>Use natural hand gestures to emphasize points</li>
           </ul>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div style={styles.gridContainer}>
         {/* Video recording section */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="relative">
+        <div style={styles.card}>
+          <div style={{ position: 'relative' }}>
             {countdownValue && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-                <span className="text-6xl text-white font-bold">{countdownValue}</span>
+              <div style={styles.countdownOverlay}>
+                <span style={styles.countdownText}>{countdownValue}</span>
               </div>
             )}
             {cameraEnabled ? (
-              <div className="relative">
+              <div style={{ position: 'relative' }}>
                 <Webcam
                   audio={micEnabled}
                   ref={webcamRef}
                   width="100%"
                   height="auto"
-                  className={`w-full ${isRecording ? 'border-2 border-red-500' : ''}`}
+                  style={{ 
+                    width: '100%', 
+                    borderRadius: isRecording ? '0' : '0.5rem 0.5rem 0 0',
+                    border: isRecording ? '3px solid #ef4444' : 'none' 
+                  }}
                 />
                 {isRecording && (
-                  <div className="absolute top-3 left-3 bg-red-500 text-white rounded-full px-3 py-1 flex items-center text-sm font-medium">
-                    <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-white inline-block"></span>
+                  <div style={styles.recIndicator}>
+                    <span style={{
+                      ...styles.pulseDot,
+                      animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    }}></span>
                     REC {formatTime(elapsedTime)}
                   </div>
                 )}
               </div>
             ) : (
-              <div className="bg-gray-900 w-full h-80 flex items-center justify-center">
-                <p className="text-white text-center">
-                  <VideoOff size={48} className="mx-auto mb-2" />
+              <div style={{ 
+                backgroundColor: '#111827', 
+                width: '100%', 
+                height: '320px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                borderRadius: '0.5rem 0.5rem 0 0'
+              }}>
+                <p style={{ textAlign: 'center', color: 'white' }}>
+                  <VideoOff size={48} style={{ margin: '0 auto 0.5rem auto' }} />
                   Camera is turned off
                 </p>
               </div>
@@ -281,37 +517,71 @@ const VideoAnalysis = () => {
           </div>
           
           {videoURL && !isRecording && (
-            <div className="p-4 border-t border-gray-200">
-              <h3 className="font-medium mb-2">Review Recording</h3>
-              <video src={videoURL} controls className="w-full rounded" />
+            <div style={{ padding: '1rem', borderTop: '1px solid #e2e8f0' }}>
+              <h3 style={{ fontWeight: '500', marginBottom: '0.5rem' }}>Review Recording</h3>
+              <video 
+                src={videoURL} 
+                controls 
+                style={{ width: '100%', borderRadius: '0.375rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)' }} 
+              />
             </div>
           )}
 
-          <div className="p-4 bg-gray-50 border-t border-gray-200">
-            <div className="flex flex-wrap gap-2 justify-between items-center">
-              <div className="flex gap-2">
+          <div style={{ 
+            padding: '1rem', 
+            backgroundColor: '#f8fafc', 
+            borderTop: '1px solid #e2e8f0',
+            borderRadius: '0 0 0.75rem 0.75rem'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '0.5rem', 
+              justifyContent: 'space-between', 
+              alignItems: 'center' 
+            }}>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button 
                   onClick={() => setCameraEnabled(!cameraEnabled)}
-                  className={`p-2 rounded-full ${cameraEnabled ? 'bg-gray-200 text-gray-700' : 'bg-red-100 text-red-700'}`}
+                  style={{ 
+                    padding: '0.5rem', 
+                    borderRadius: '9999px', 
+                    backgroundColor: cameraEnabled ? '#e2e8f0' : '#fee2e2',
+                    color: cameraEnabled ? '#475569' : '#b91c1c',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                   title={cameraEnabled ? "Turn camera off" : "Turn camera on"}
                 >
                   {cameraEnabled ? <Video size={20} /> : <VideoOff size={20} />}
                 </button>
                 <button 
                   onClick={() => setMicEnabled(!micEnabled)}
-                  className={`p-2 rounded-full ${micEnabled ? 'bg-gray-200 text-gray-700' : 'bg-red-100 text-red-700'}`}
+                  style={{ 
+                    padding: '0.5rem', 
+                    borderRadius: '9999px', 
+                    backgroundColor: micEnabled ? '#e2e8f0' : '#fee2e2',
+                    color: micEnabled ? '#475569' : '#b91c1c',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                   title={micEnabled ? "Mute microphone" : "Unmute microphone"}
                 >
                   {micEnabled ? <Mic size={20} /> : <MicOff size={20} />}
                 </button>
               </div>
               
-              <div className="flex gap-2">
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
                 {!isRecording && !analyzing && (
                   <button 
                     onClick={startCountdown}
                     disabled={!cameraEnabled}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    style={{
+                      ...styles.button,
+                      ...styles.primaryButton,
+                      opacity: cameraEnabled ? 1 : 0.5,
+                      cursor: cameraEnabled ? 'pointer' : 'not-allowed'
+                    }}
                   >
                     <Play size={16} /> Start Recording
                   </button>
@@ -319,7 +589,10 @@ const VideoAnalysis = () => {
                 {isRecording && (
                   <button 
                     onClick={handleStopRecording}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md flex items-center gap-1 transition"
+                    style={{
+                      ...styles.button,
+                      ...styles.dangerButton
+                    }}
                   >
                     <Square size={16} /> Stop Recording
                   </button>
@@ -327,7 +600,10 @@ const VideoAnalysis = () => {
                 {videoURL && !isRecording && (
                   <button 
                     onClick={handleDownload}
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md flex items-center gap-1 transition"
+                    style={{
+                      ...styles.button,
+                      ...styles.successButton
+                    }}
                   >
                     <Download size={16} /> Download
                   </button>
@@ -338,188 +614,435 @@ const VideoAnalysis = () => {
         </div>
 
         {/* Real-time analysis section */}
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-4">Real-Time Analysis</h2>
+        <div style={styles.card}>
+          <div style={styles.cardHeader}>Real-Time Analysis</div>
           
-          {!isRecording && !analyzing && !analysisResults && (
-            <div className="text-center py-8 text-gray-500">
-              <BarChart2 size={48} className="mx-auto mb-2 text-gray-400" />
-              <p>Start recording to see real-time analysis</p>
-            </div>
-          )}
-          
-          {isRecording && realTimeData.length > 0 && (
-            <>
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Speaking Speed</h3>
-                <div className="h-32">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={realTimeData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="time" label={{ value: 'Time (s)', position: 'insideBottomRight', offset: -5 }} />
-                      <YAxis label={{ value: 'WPM', angle: -90, position: 'insideLeft' }} />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="speed" stroke="#3B82F6" dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+          <div style={{ padding: '1rem' }}>
+            {!isRecording && !analyzing && !analysisResults && (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '2rem 0', 
+                color: '#64748b' 
+              }}>
+                <BarChart2 size={48} style={{ margin: '0 auto 0.5rem auto', color: '#94a3b8' }} />
+                <p>Start recording to see real-time analysis</p>
               </div>
-              
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Confidence Score</h3>
-                <div className="h-32">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={realTimeData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="time" label={{ value: 'Time (s)', position: 'insideBottomRight', offset: -5 }} />
-                      <YAxis domain={[0, 100]} label={{ value: 'Score', angle: -90, position: 'insideLeft' }} />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="confidence" stroke="#10B981" dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </>
-          )}
-
-          {analyzing && (
-            <div className="flex flex-col items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-              <p className="text-gray-600">Analyzing your interview performance...</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Analysis results section */}
-      {analysisResults && (
-        <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="bg-blue-500 text-white p-4 flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Analysis Results</h2>
-            <button 
-              onClick={() => setShowDetailedAnalysis(!showDetailedAnalysis)}
-              className="text-white hover:bg-blue-600 p-1 rounded"
-            >
-              {showDetailedAnalysis ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-          </div>
-          
-          <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-1">Confidence Score</h3>
-                <div className="flex items-end">
-                  <span className="text-3xl font-bold text-blue-700">{analysisResults.confidence}</span>
-                  <span className="text-gray-500 ml-1">/100</span>
-                </div>
-              </div>
-              
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-1">Speaking Pace</h3>
-                <div className="flex items-end">
-                  <span className="text-3xl font-bold text-green-700">{analysisResults.speakingSpeed.wpm}</span>
-                  <span className="text-gray-500 ml-1">WPM</span>
-                </div>
-                <span className="text-sm text-green-600">{analysisResults.speakingSpeed.assessment}</span>
-              </div>
-              
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium mb-1">Filler Words</h3>
-                <div className="flex items-end">
-                  <span className="text-3xl font-bold text-purple-700">{analysisResults.fillerWords.count}</span>
-                  <span className="text-gray-500 ml-1">detected</span>
-                </div>
-              </div>
-            </div>
-
-            {showDetailedAnalysis && (
-              <div className="mt-6 space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-3">Filler Words Analysis</h3>
-                  <div className="h-64">
+            )}
+            
+            {isRecording && realTimeData.length > 0 && (
+              <>
+                <div style={{ marginBottom: '1rem' }}>
+                  <h3 style={{ 
+                    fontSize: '0.875rem', 
+                    fontWeight: '500', 
+                    color: '#64748b', 
+                    marginBottom: '0.25rem' 
+                  }}>Speaking Speed</h3>
+                  <div style={{ height: '8rem' }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={fillerWordsData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Bar dataKey="count" fill="#8884d8" />
-                      </BarChart>
+                      <LineChart data={realTimeData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis 
+                          dataKey="time" 
+                          label={{ value: 'Time (s)', position: 'insideBottomRight', offset: -5 }}
+                          stroke="#64748b"
+                          tick={{ fill: '#64748b' }}
+                        />
+                        <YAxis 
+                          label={{ value: 'WPM', angle: -90, position: 'insideLeft' }} 
+                          stroke="#64748b"
+                          tick={{ fill: '#64748b' }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '0.375rem',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          }} 
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="speed" 
+                          stroke="#3b82f6" 
+                          strokeWidth={2}
+                          dot={false} 
+                          activeDot={{ r: 6, fill: '#3b82f6', stroke: 'white', strokeWidth: 2 }}
+                        />
+                      </LineChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium mb-3">Body Language Assessment</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium text-gray-500">Eye Contact</h4>
-                      <div className="mt-2">
-                        <div className="flex justify-between mb-1">
-                          <span>{analysisResults.eyeContact.assessment}</span>
-                          <span>{analysisResults.eyeContact.score}/100</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
-                            style={{ width: `${analysisResults.eyeContact.score}%` }}
-                          ></div>
-                        </div>
+                  <h3 style={{ 
+                    fontSize: '0.875rem', 
+                    fontWeight: '500', 
+                    color: '#64748b', 
+                    marginBottom: '0.25rem' 
+                  }}>Confidence Score</h3>
+                  <div style={{ height: '8rem' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={realTimeData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis 
+                          dataKey="time" 
+                          label={{ value: 'Time (s)', position: 'insideBottomRight', offset: -5 }}
+                          stroke="#64748b"
+                          tick={{ fill: '#64748b' }}
+                        />
+                        <YAxis 
+                          domain={[0, 100]} 
+                          label={{ value: 'Score', angle: -90, position: 'insideLeft' }}
+                          stroke="#64748b"
+                          tick={{ fill: '#64748b' }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '0.375rem',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          }} 
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="confidence" 
+                          stroke="#10b981" 
+                          strokeWidth={2}
+                          dot={false} 
+                          activeDot={{ r: 6, fill: '#10b981', stroke: 'white', strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {analyzing && (
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                height: '16rem' 
+              }}>
+                <div style={{ 
+                  animation: 'spin 1s linear infinite',
+                  borderRadius: '50%',
+                  height: '3rem',
+                  width: '3rem',
+                  borderTop: '2px solid #3b82f6',
+                  borderRight: '2px solid transparent',
+                  borderBottom: '2px solid #3b82f6',
+                  borderLeft: '2px solid transparent',
+                  marginBottom: '1rem'
+                }}></div>
+                <p style={{ color: '#64748b', fontSize: '0.875rem' }}>Analyzing your interview performance...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Analysis results section */}
+      {analysisResults && (
+        <div style={{
+          marginTop: '1.5rem',
+          ...styles.card
+        }}>
+          <div style={{ 
+            backgroundColor: '#3b82f6', 
+            color: 'white', 
+            padding: '1rem', 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            borderRadius: '0.75rem 0.75rem 0 0'
+          }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '600' }}>Analysis Results</h2>
+            <button 
+              onClick={() => setShowDetailedAnalysis(!showDetailedAnalysis)}
+              style={{ 
+                color: 'white', 
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: '0.25rem',
+                padding: '0.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              }}
+            >
+              {showDetailedAnalysis ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </button>
+          </div>
+          
+          <div style={{ padding: '1.5rem' }}>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(1, 1fr)', 
+              gap: '1rem',
+              marginBottom: '1rem',
+              '@media (min-width: 768px)': {
+                gridTemplateColumns: 'repeat(3, 1fr)',
+              }
+            }}>
+              <div style={{ 
+                backgroundColor: '#eff6ff', 
+                padding: '1rem', 
+                borderRadius: '0.5rem',
+                transition: 'transform 0.2s ease',
+                transform: 'translateY(0)',
+                ':hover': {
+                  transform: 'translateY(-2px)'
+                }
+              }}>
+                <h3 style={{ 
+                  fontSize: '1.125rem', 
+                  fontWeight: '500', 
+                  marginBottom: '0.25rem' 
+                }}>Confidence Score</h3>
+                <div style={{fontSize: '1.875rem', 
+                  fontWeight: '700', 
+                  color: '#1e40af'
+                }}>
+                  {analysisResults.confidence}%
+                </div>
+                <div style={{ marginTop: '0.5rem' }}>
+                  <div style={styles.progressBar}>
+                    <div style={{
+                      ...styles.progressBarFill,
+                      width: `${analysisResults.confidence}%`,
+                      backgroundColor: '#3b82f6'
+                    }}></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{ 
+                backgroundColor: '#f0fdf4', 
+                padding: '1rem', 
+                borderRadius: '0.5rem' 
+              }}>
+                <h3 style={{ 
+                  fontSize: '1.125rem', 
+                  fontWeight: '500', 
+                  marginBottom: '0.25rem' 
+                }}>Speaking Pace</h3>
+                <div style={{ 
+                  fontSize: '1.875rem', 
+                  fontWeight: '700', 
+                  color: '#166534'
+                }}>
+                  {analysisResults.speakingSpeed.wpm} <span style={{ fontSize: '1rem', fontWeight: '400' }}>WPM</span>
+                </div>
+                <div style={{ marginTop: '0.5rem', color: '#166534' }}>
+                  {analysisResults.speakingSpeed.assessment}
+                </div>
+              </div>
+              
+              <div style={{ 
+                backgroundColor: '#fff7ed', 
+                padding: '1rem', 
+                borderRadius: '0.5rem' 
+              }}>
+                <h3 style={{ 
+                  fontSize: '1.125rem', 
+                  fontWeight: '500', 
+                  marginBottom: '0.25rem' 
+                }}>Filler Words</h3>
+                <div style={{ 
+                  fontSize: '1.875rem', 
+                  fontWeight: '700', 
+                  color: '#9a3412'
+                }}>
+                  {analysisResults.fillerWords.count}
+                </div>
+                <div style={{ marginTop: '0.5rem', color: '#9a3412' }}>
+                  {analysisResults.fillerWords.count < 5 ? 'Excellent!' : analysisResults.fillerWords.count < 10 ? 'Good' : 'Needs improvement'}
+                </div>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: '1rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '500', marginBottom: '0.5rem' }}>Detected Keywords</h3>
+              <div>
+                {analysisResults.keywords.map((keyword, index) => (
+                  <span key={index} style={styles.keywordTag}>{keyword}</span>
+                ))}
+              </div>
+            </div>
+            
+            {showDetailedAnalysis && (
+              <div style={{ 
+                marginTop: '2rem',
+                backgroundColor: '#f8fafc',
+                padding: '1.5rem',
+                borderRadius: '0.5rem'
+              }}>
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '600', 
+                  marginBottom: '1rem',
+                  borderBottom: '1px solid #e2e8f0',
+                  paddingBottom: '0.5rem'
+                }}>Detailed Analysis</h3>
+                
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(1, 1fr)', 
+                  gap: '1.5rem',
+                  '@media (min-width: 768px)': {
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                  }
+                }}>
+                  <div>
+                    <h4 style={{ fontWeight: '500', marginBottom: '0.75rem' }}>Body Language</h4>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span>Eye Contact</span>
+                        <span style={{ fontWeight: '500' }}>{analysisResults.eyeContact.score}%</span>
+                      </div>
+                      <div style={styles.progressBar}>
+                        <div style={{
+                          ...styles.progressBarFill,
+                          width: `${analysisResults.eyeContact.score}%`,
+                          backgroundColor: analysisResults.eyeContact.score > 80 ? '#10b981' : analysisResults.eyeContact.score > 60 ? '#f59e0b' : '#ef4444'
+                        }}></div>
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#64748b', 
+                        marginTop: '0.25rem' 
+                      }}>
+                        {analysisResults.eyeContact.assessment}
                       </div>
                     </div>
                     
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium text-gray-500">Posture</h4>
-                      <div className="mt-2">
-                        <div className="flex justify-between mb-1">
-                          <span>{analysisResults.posture.assessment}</span>
-                          <span>{analysisResults.posture.score}/100</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-green-600 h-2 rounded-full" 
-                            style={{ width: `${analysisResults.posture.score}%` }}
-                          ></div>
-                        </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span>Posture</span>
+                        <span style={{ fontWeight: '500' }}>{analysisResults.posture.score}%</span>
+                      </div>
+                      <div style={styles.progressBar}>
+                        <div style={{
+                          ...styles.progressBarFill,
+                          width: `${analysisResults.posture.score}%`,
+                          backgroundColor: analysisResults.posture.score > 80 ? '#10b981' : analysisResults.posture.score > 60 ? '#f59e0b' : '#ef4444'
+                        }}></div>
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#64748b', 
+                        marginTop: '0.25rem' 
+                      }}>
+                        {analysisResults.posture.assessment}
                       </div>
                     </div>
                     
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium text-gray-500">Gestures</h4>
-                      <div className="mt-2">
-                        <div className="flex justify-between mb-1">
-                          <span>{analysisResults.gestures.assessment}</span>
-                          <span>{analysisResults.gestures.score}/100</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-purple-600 h-2 rounded-full" 
-                            style={{ width: `${analysisResults.gestures.score}%` }}
-                          ></div>
-                        </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span>Gestures</span>
+                        <span style={{ fontWeight: '500' }}>{analysisResults.gestures.score}%</span>
                       </div>
+                      <div style={styles.progressBar}>
+                        <div style={{
+                          ...styles.progressBarFill,
+                          width: `${analysisResults.gestures.score}%`,
+                          backgroundColor: analysisResults.gestures.score > 80 ? '#10b981' : analysisResults.gestures.score > 60 ? '#f59e0b' : '#ef4444'
+                        }}></div>
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#64748b', 
+                        marginTop: '0.25rem' 
+                      }}>
+                        {analysisResults.gestures.assessment}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 style={{ fontWeight: '500', marginBottom: '0.75rem' }}>Speech Analysis</h4>
+                    <div style={{ height: '15rem' }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                          data={fillerWordsData}
+                          margin={{
+                            top: 5,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                          }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                          <XAxis dataKey="name" stroke="#64748b" />
+                          <YAxis stroke="#64748b" />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'white', 
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '0.375rem',
+                              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                            }} 
+                          />
+                          <Legend />
+                          <Bar dataKey="count" fill="#f97316" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
                   </div>
                 </div>
                 
-                <div>
-                  <h3 className="text-lg font-medium mb-3">Keywords Detected</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {analysisResults.keywords.map((keyword, index) => (
-                      <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                        {keyword}
-                      </span>
-                    ))}
+                <div style={{ marginTop: '2rem' }}>
+                  <h4 style={{ fontWeight: '500', marginBottom: '0.75rem' }}>Overall Sentiment</h4>
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    backgroundColor: analysisResults.sentiment === 'Positive' ? '#f0fdf4' : analysisResults.sentiment === 'Neutral' ? '#f8fafc' : '#fef2f2',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    borderLeft: `4px solid ${analysisResults.sentiment === 'Positive' ? '#22c55e' : analysisResults.sentiment === 'Neutral' ? '#64748b' : '#ef4444'}`
+                  }}>
+                    {analysisResults.sentiment === 'Positive' && <Check size={24} style={{ color: '#16a34a', marginRight: '0.75rem' }} />}
+                    {analysisResults.sentiment === 'Neutral' && <Clock size={24} style={{ color: '#64748b', marginRight: '0.75rem' }} />}
+                    {analysisResults.sentiment === 'Negative' && <AlertCircle size={24} style={{ color: '#dc2626', marginRight: '0.75rem' }} />}
+                    <div>
+                      <p style={{ fontWeight: '500' }}>{analysisResults.sentiment} Impression</p>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: '#64748b', 
+                        marginTop: '0.25rem' 
+                      }}>
+                        {analysisResults.sentiment === 'Positive' 
+                          ? 'Your interview created a positive impression. Great job!' 
+                          : analysisResults.sentiment === 'Neutral' 
+                          ? 'Your interview created a neutral impression. There\'s room for improvement.' 
+                          : 'Your interview may have created a negative impression. Focus on improving the highlighted areas.'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
             
-            <div className="mt-6 flex justify-end">
+            <div style={{ 
+              marginTop: '1.5rem', 
+              display: 'flex', 
+              justifyContent: 'flex-end',
+              gap: '0.5rem'
+            }}>
               {!isSubmitting && !submitSuccess && (
                 <button 
                   onClick={handleSubmitVideo}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md flex items-center gap-2 transition"
+                  style={{
+                    ...styles.button,
+                    ...styles.primaryButton
+                  }}
                 >
                   <Send size={16} /> Submit for Expert Review
                 </button>
@@ -528,16 +1051,41 @@ const VideoAnalysis = () => {
               {isSubmitting && (
                 <button 
                   disabled
-                  className="bg-blue-300 text-white px-6 py-2 rounded-md flex items-center gap-2"
+                  style={{
+                    ...styles.button,
+                    ...styles.primaryButton,
+                    opacity: 0.7,
+                    cursor: 'not-allowed'
+                  }}
                 >
-                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                  <div style={{ 
+                    animation: 'spin 1s linear infinite',
+                    borderRadius: '50%',
+                    height: '1rem',
+                    width: '1rem',
+                    borderTop: '2px solid white',
+                    borderRight: '2px solid transparent',
+                    borderBottom: '2px solid white',
+                    borderLeft: '2px solid transparent',
+                    marginRight: '0.5rem'
+                  }}></div>
                   Submitting...
                 </button>
               )}
               
               {submitSuccess && (
-                <div className="bg-green-100 text-green-800 px-4 py-2 rounded-md flex items-center gap-2">
-                  <Check size={16} /> Successfully submitted for expert review
+                <div style={{ 
+                  backgroundColor: '#f0fdf4', 
+                  color: '#16a34a', 
+                  padding: '0.625rem 1rem',
+                  borderRadius: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontWeight: '500'
+                }}>
+                  <Check size={16} />
+                  Submitted successfully! We'll email you feedback.
                 </div>
               )}
             </div>
