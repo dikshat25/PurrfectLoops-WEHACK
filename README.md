@@ -83,4 +83,4 @@ To address these hiring challenges, we propose an **AI-driven Skill Hiring Platf
 
 ---
 
-This **AI-powered Skill Hiring Platform** aims to **streamline recruitment, improve hiring accuracy, and enhance the candidate experience**, making hiring smarter and more efficient. 🚀
+This **AI-powered Skill Hiring Platform** aims to **streamline recruitment, improve hiring accuracy, and enhance the candidate experience**, making hiring smarter and more efficient. 
